@@ -5,7 +5,6 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
 
 
-
 def ViewFiles():
     list_of_Negfiles = glob.glob('./corpus/neg/*.txt')
     list_of_Posfiles = glob.glob('./corpus/pos/*.txt')
@@ -32,13 +31,12 @@ def tf_idf(samples):
     X = vectorizer.fit_transform(samples)
     return X
 
+
 def model(samples, labels):
-    clf = LogisticRegression()
+    clf = LogisticRegression(solver='lbfgs')
     clf.fit(samples[:1900], labels[:1900])
     print(clf.score(samples[1900:], labels[1900:]))
     return clf
-
-
 
 
 def main():
@@ -48,7 +46,6 @@ def main():
     #     print(i)
     #     print()
     # print(tf_idf(samples)[0])
-
     model(tf_idf(samples), labels)
 
 
