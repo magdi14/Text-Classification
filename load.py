@@ -39,7 +39,8 @@ def model(samples, labels):
     return clf
 
 
-def main():
+
+if __name__ == "__main__":
     samples, labels = ViewFiles()
     # print(labels)
     # for i in samples:
@@ -47,8 +48,3 @@ def main():
     #     print()
     # print(tf_idf(samples)[0])
     model(tf_idf(samples), labels)
-
-
-
-if __name__ == "__main__":
-    main()
