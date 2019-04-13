@@ -34,7 +34,7 @@ def model(samples, labels):
 
 
 def predict_from_file(vectorizer, clf):
-    file = open("test.txt")
+    file = open("testing")
     testFile = file.read()
     X = vectorizer.transform(testFile)
     return clf.predict(X)
