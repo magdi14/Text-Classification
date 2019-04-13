@@ -38,7 +38,7 @@ def model(samples, labels):
 def predict_from_file(vectorizer, clf):
     file = open("testing")
     testFile = file.read()
-    X = vectorizer.transform(testFile)
+    X = vectorizer.transform([testFile])
     return clf.predict(X)
 
 
@@ -47,4 +47,5 @@ if __name__ == "__main__":
     vectorizer = TfidfVectorizer()
     X = vectorizer.fit_transform(samples)
     clf = model(X, labels)
+    # print(predict_from_file(vectorizer, clf))
 
