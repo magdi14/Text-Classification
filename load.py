@@ -4,8 +4,6 @@ from random import shuffle
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
 
-import matplotlib.pyplot as plt
-
 
 def ViewFiles():
     list_of_Negfiles = glob.glob('./corpus/neg/*.txt')
@@ -28,17 +26,15 @@ def ViewFiles():
     # print("Positives: ", list_of_Posfiles)
 
 
-def tf_idf(samples):
-    vectorizer = TfidfVectorizer()
-    X = vectorizer.fit_transform(samples)
-    return X
-
-
 def model(samples, labels):
     clf = LogisticRegression(solver='lbfgs')
     clf.fit(samples[:1900], labels[:1900])
     print(clf.score(samples[1900:], labels[1900:]))
     return clf
+
+
+def predict_from_file(vectorizer, clf):
+    pass
 
 
 if __name__ == "__main__":
@@ -48,4 +44,6 @@ if __name__ == "__main__":
     #     print(i)
     #     print()
     # print(tf_idf(samples)[0])
-    model(tf_idf(samples), labels)
+    vectorizer = TfidfVectorizer()
+    X = vectorizer.fit_transform(samples)
+    clf = model(X, labels)
