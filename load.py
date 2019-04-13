@@ -1,5 +1,6 @@
-import sklearn
+from sklearn.feature_extraction.text import TfidfVectorizer
 import glob
+import numpy as np
 
 def ViewFiles():
     list_of_Negfiles = glob.glob('./corpus/neg/*.txt')
@@ -17,10 +18,16 @@ def ViewFiles():
     return samples, labels
     # print("Negatives: ", list_of_Negfiles)
     # print("Positives: ", list_of_Posfiles)
-
-
+def tf_idf(samples):
+    vectorizer = TfidfVectorizer()
+    X = vectorizer.fit_transform(samples)
+    return X
 def main():
-    print(ViewFiles()[999][1])
+    samples, labels = ViewFiles()
+    # for i in samples:
+    #     print(i)
+    #     print()
+    print(tf_idf(samples)[0])
 
 if __name__ == "__main__":
     main()
