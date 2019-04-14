@@ -29,8 +29,9 @@ def model(samples, labels):
     clf = LogisticRegression(solver='lbfgs')
     clf.fit(samples[:1900], labels[:1900])
     print(clf.score(samples[1900:], labels[1900:]))
-    plt.plot(range(1900, 2000), labels[1900:], 'go')
-    plt.plot(range(1900, 2000), [clf.predict_proba(i)[0][1] for i in samples[1900:]], 'bo')
+    for i in range(1900, 2000):
+        plt.plot(i, labels[i], 'g+') if labels[i] == 1 else plt.plot(i, labels[i], 'rx')
+    plt.plot(range(1900, 2000), [clf.predict_proba(i)[0][1] for i in samples[1900:]], 'blue')
     plt.show()
     return clf
 
