@@ -2,6 +2,8 @@ import glob
 from random import shuffle, seed
 
 import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
+
 from sklearn.decomposition import TruncatedSVD
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
@@ -30,13 +32,16 @@ def model(samples, labels):
     clf = LogisticRegression(solver='lbfgs')
     clf.fit(samples[:1800], labels[:1800])
     print("Accuracy:", clf.score(samples[1800:], labels[1800:]))
-    data2d = TruncatedSVD(n_components=2).fit_transform(samples)
+    fig = plt.figure()
+    ax = Axes3D(fig)
+
+    data2d = TruncatedSVD(n_components=3).fit_transform(samples)
     print(data2d.shape)
     for i in range(len(labels[1800:])):
         if labels[i] == 1:
-            plt.scatter(x=data2d[:, 0][i], y=data2d[:, 1][i], c='green')
+            ax.scatter(data2d[:, 0][i], data2d[:, 1][i], data2d[:, 2][i], c='green')
         else:
-            plt.scatter(x=data2d[:, 0][i], y=data2d[:, 1][i], c='red')
+            ax.scatter(data2d[:, 0][i], data2d[:, 1][i], data2d[:, 2][i], c='red')
     plt.show()
     return clf
 
@@ -51,7 +56,7 @@ def predict_from_file(vectorizer, clf):
 if __name__ == "__main__":
     seed(2)
     samples, labels = ViewFiles()
-    vectorizer = TfidfVectorizer()
+    vectorizer = TfidfVectorizer(stop_words='english')
     X = vectorizer.fit_transform(samples)
     clf = model(X, labels)
     # print(predict_from_file(vectorizer, clf))
