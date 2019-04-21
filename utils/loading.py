@@ -29,9 +29,3 @@ def load_glove_embeddings():
             values = line.split()
             glove[values[0]] = np.array(values[1:])
     return glove
-
-
-if __name__ == '__main__':
-    glove = load_glove_embeddings()
-    # print(glove['love'].shape)
-    # print(glove['xddsdfd'])

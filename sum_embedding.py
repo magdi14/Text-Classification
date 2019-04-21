@@ -3,7 +3,6 @@ from nltk import word_tokenize
 from sklearn.model_selection import train_test_split
 
 from tfidf import TfidfModel
-from utils.loading import load_glove_embeddings, load_data
 from utils.plotting import plot
 
 
@@ -20,8 +19,3 @@ class SumEmbeddingsModel(TfidfModel):
              samples])
         self.x_train, self.x_test, self.y_train, self.y_test = train_test_split(x, labels, random_state=1,
                                                                                 test_size=0.2)
-
-
-if __name__ == '__main__':
-    samples, labels = load_data()
-    t = SumEmbeddingsModel(samples, labels, load_glove_embeddings())
