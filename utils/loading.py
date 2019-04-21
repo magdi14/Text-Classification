@@ -1,3 +1,4 @@
+from collections import defaultdict
 from glob import glob
 
 import numpy as np
@@ -20,7 +21,7 @@ def load_data():
 
 
 def load_glove_embeddings():
-    glove = {}
+    glove = defaultdict(lambda: np.zeros(shape=(50,)))
     with open('glove/glove.6B.50d.txt') as f:
         for line in f:
             if line == '':
@@ -32,4 +33,5 @@ def load_glove_embeddings():
 
 if __name__ == '__main__':
     glove = load_glove_embeddings()
-    print(glove['love'])
+    # print(glove['love'].shape)
+    # print(glove['xddsdfd'])
