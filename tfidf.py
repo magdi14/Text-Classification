@@ -1,64 +1,32 @@
-import glob
-from random import shuffle, seed
-
-import matplotlib.pyplot as plt
-from mpl_toolkits.mplot3d import Axes3D
-from sklearn.decomposition import TruncatedSVD
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
+from sklearn.model_selection import train_test_split
+
+from loading import load_data
+from plotting import plot
 
 
-def load_data():
-    list_of_negfiles = glob.glob('./corpus/neg/*.txt')
-    list_of_posfiles = glob.glob('./corpus/pos/*.txt')
-    samples = []
-    labels = []
-    for i in list_of_negfiles:
-        f = open(i)
-        samples.append(f.read())
-        labels.append(0)
-    for i in list_of_posfiles:
-        f = open(i)
-        samples.append(f.read())
-        labels.append(1)
-    samples_labels = list(zip(samples, labels))
-    shuffle(samples_labels)
-    samples, labels = zip(*samples_labels)
-    return samples, labels
+class TfidfModel:
+    def __init__(self, samples, labels):
+        self.transform(samples, labels)
+        self.train()
+        plot(self.x_test, self.y_test)
 
+    def transform(self, samples, labels):
+        self.vectorizer = TfidfVectorizer(stop_words='english')
+        self.x_train, self.x_test, self.y_train, self.y_test = train_test_split(self.vectorizer.fit_transform(samples),
+                                                                                labels, random_state=1, test_size=0.2)
 
-def model(samples, labels):
-    clf = LogisticRegression(solver='lbfgs')
-    clf.fit(samples[:1800], labels[:1800])
-    print("Accuracy:", clf.score(samples[1800:], labels[1800:]))
-    return clf
+    def train(self):
+        self.clf = LogisticRegression(solver='lbfgs')
+        self.clf.fit(self.x_train, self.y_train)
+        print("Accuracy:", self.clf.score(self.x_test, self.y_test))
 
-
-def plot(samples, labels):
-    fig = plt.figure()
-    ax = Axes3D(fig)
-    data2d = TruncatedSVD(n_components=3).fit_transform(samples)
-    print(data2d.shape)
-    for i in range(len(labels[1800:])):
-        if labels[i] == 1:
-            ax.scatter(data2d[:, 0][i], data2d[:, 1][i], data2d[:, 2][i], c='green')
-        else:
-            ax.scatter(data2d[:, 0][i], data2d[:, 1][i], data2d[:, 2][i], c='red')
-    plt.show()
-
-
-def predict_from_file(vectorizer, clf):
-    file = open("testing")
-    testFile = file.read()
-    X = vectorizer.transform([testFile])
-    return "Positive" if clf.predict(X) == [1] else "Negative"
+    def predict(self, text):
+        X = self.vectorizer.transform([text])
+        return "Negative" if self.clf.predict(X)[0] == 0 else "Positive"
 
 
 if __name__ == "__main__":
-    seed(2)
     samples, labels = load_data()
-    vectorizer = TfidfVectorizer(stop_words='english')
-    X = vectorizer.fit_transform(samples)
-    clf = model(X, labels)
-    plot(X, labels)
-    # print(predict_from_file(vectorizer, clf))
+    t = TfidfModel(samples, labels)
