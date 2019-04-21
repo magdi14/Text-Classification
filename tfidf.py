@@ -1,7 +1,6 @@
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
-from utils.plotting import plot
 
 
 class TfidfModel:
@@ -18,7 +17,7 @@ class TfidfModel:
     def train(self):
         self.clf = LogisticRegression(solver='lbfgs', max_iter=10000)
         self.clf.fit(self.x_train, self.y_train)
-        print("Accuracy:", self.clf.score(self.x_test, self.y_test))
+        print("Accuracy of", self.__class__.__name__, ":", self.clf.score(self.x_test, self.y_test))
 
     def predict(self, text):
         X = self.vectorizer.transform([text])

@@ -11,7 +11,7 @@ class SumEmbeddingsModel(TfidfModel):
         self.word_embeddings = word_embeddings
         self.transform(samples, labels)
         self.train()
-        plot(self.x_test, self.y_test)
+        # plot(self.x_test, self.y_test)
 
     def transform(self, samples, labels):
         x = np.array(
