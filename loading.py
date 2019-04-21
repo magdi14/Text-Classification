@@ -1,5 +1,7 @@
 from glob import glob
+
 import numpy as np
+
 
 def load_data():
     list_of_negfiles = glob('./corpus/neg/*.txt')
@@ -15,3 +17,19 @@ def load_data():
         samples.append(f.read())
         labels.append(1)
     return np.array(samples), np.array(labels)
+
+
+def load_glove_embeddings():
+    glove = {}
+    with open('glove/glove.6B.50d.txt') as f:
+        for line in f:
+            if line == '':
+                break
+            values = line.split()
+            glove[values[0]] = np.array(values[1:])
+    return glove
+
+
+if __name__ == '__main__':
+    glove = load_glove_embeddings()
+    print(glove['love'])
